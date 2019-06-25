@@ -3,3 +3,9 @@ body {
     max-width: 60em;
     width: 88%;
 }
+
+td {
+    height: 30px;
+    width: 30px;
+    background-color: #999999;
+}
