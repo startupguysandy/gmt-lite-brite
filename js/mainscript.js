@@ -18,11 +18,25 @@ function runCode() {
     function clickHandler(event){
         console.log(event);
         if(event.target.localName === 'td'){
-            // table cell has been clicked, do something
+            cycleColors(event.target);
         }
     }
 
+    function cycleColors(currentCell){
+        //white, yellow, blue, pink, orange and green
+        let cellColors = ['yellow','blue','pink','orange','green','white'];
+        let currentCounter = parseInt(currentCell.getAttribute('data-counter'));
+        let nextCounter = currentCounter+1;
 
+        if(currentCounter !== 5){
+            currentCell.setAttribute('data-counter', nextCounter);
+            currentCell.className = cellColors[nextCounter];
+        } else {
+            currentCell.setAttribute('data-counter', 0);
+            currentCell.className = cellColors[0];
+        }
+    }
+    
     //
     // Initializations
     //

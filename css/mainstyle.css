@@ -9,3 +9,11 @@ td {
     width: 30px;
     background-color: #999999;
 }
+
+/* Peg Colors */
+td.white {background-color: #eeeeee;}
+td.yellow {background-color: #fed231;}
+td.blue {background-color: #2eacdd;}
+td.pink {background-color: #cb5aa2;}
+td.orange {background-color: #f2952e;}
+td.green {background-color: #8ec348;}
