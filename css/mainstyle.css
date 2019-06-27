@@ -30,10 +30,12 @@ ul, li, input {
 
 .peg-colors .radio:hover {
     opacity: 1;
+    border-color: #333333;
 }
 
 .peg-colors input:checked ~ .radio {
     opacity: 1;
+    border: 2px solid #333333;
 }
 
 .peg-colors label {

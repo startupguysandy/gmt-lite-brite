@@ -18,8 +18,8 @@ function runCode() {
         green: '#8ec348',
         white: '#efefef'
     };
-    let selectedColor = 'yellow';
-
+    let newColor = 'yellow';
+    let currentColor;
     //
     // Methods
     //
@@ -57,19 +57,22 @@ function runCode() {
             }
         }
         if(event.target.hasAttribute('data-color')){
-            selectedColor = event.target.getAttribute('data-color');
-            console.log(selectedColor);
+            currentColor.style.borderColor = pegColors[currentColor.parentElement.getAttribute('data-color')];
+            newColor = event.target.getAttribute('data-color');
+            currentColor = toolsElement.querySelector('[data-color="'+newColor+'"]').getElementsByTagName('span')[0];
+            event.target.parentElement.getElementsByTagName('span')[0].style.borderColor = '#333333';
         }
     }
 
     function generateColors(){
         let colorSwitcher = document.getElementsByClassName('peg-colors')[0];
+
         Object.keys(pegColors).forEach(function(color){
             let labelElement = document.createElement('label');
             let radio = document.createElement('input');
             let span = document.createElement('span');
 
-            labelElement.className = 'title-case';
+            labelElement.setAttribute('data-color',color);
             radio.setAttribute('type', 'radio');
             radio.setAttribute('name','peg-color');
             radio.setAttribute('data-color',color);
@@ -81,13 +84,12 @@ function runCode() {
             labelElement.appendChild(span);
 
             colorSwitcher.appendChild(labelElement);
-            console.log(pegColors[color]);
         });
         toolsElement.appendChild(colorSwitcher);
     }
 
     function placePeg(currentCell){
-        currentCell.className = selectedColor;
+        currentCell.className = newColor;
         currentCell.innerHTML = '';
     }
 
@@ -101,17 +103,19 @@ function runCode() {
     generateTable();
     generateColors();
     document.documentElement.addEventListener('click', clickHandler, false);
+
+    // Set current color to yellow
+    currentColor = toolsElement.querySelector('[data-color="yellow"]').getElementsByTagName('span')[0];
 }
 
 // TODO: List of things to do...
 //  - Add on hover to show placement of next peg
 //  - If the user right clicks a cell, it resets the counter to 0 and color to white
 //  - Generate a table, tr's and td's via js once a button has been clicked
-//  - Add color picker for pegs
 //  - Animate in the table once it's generated to add some excitement
 //  - Add a "turn on" button on the board which makes all the lights brighter. Brings the whole thing to life!
 
-
+//  - DONE: Add color picker for pegs
 //  - DONE: Once a table cell has been clicked, change the background color
 //  - DONE: Stagger table rows to create hexagonal shape
 //  - DONE: Make the "pegs" circular
