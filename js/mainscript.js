@@ -18,8 +18,8 @@ function runCode() {
         green: '#8ec348',
         white: '#efefef'
     };
-    let newColor = 'yellow';
-    let currentColor;
+    let selectedColor = 'yellow';
+    let previousColor;
     //
     // Methods
     //
@@ -50,17 +50,17 @@ function runCode() {
     }
 
     function clickHandler(event){
-        if((event.target.localName === 'td') || (event.target.parentElement && event.target.parentElement.localName ==='td')){
-            let currentCell = event.target.localName === 'span' ? event.target.parentElement : event.target;
-            if(currentCell.className !== 'indent'){
-                placePeg(currentCell);
+        if(event.target.parentElement){
+            let parentElement = event.target.parentElement;
+            if(event.target.localName === 'td' || parentElement.localName ==='td'){
+                let currentCell = event.target.localName === 'span' ? parentElement : event.target;
+                if(currentCell.className !== 'indent'){
+                    placePeg(currentCell);
+                }
             }
-        }
-        if(event.target.hasAttribute('data-color')){
-            currentColor.style.borderColor = pegColors[currentColor.parentElement.getAttribute('data-color')];
-            newColor = event.target.getAttribute('data-color');
-            currentColor = toolsElement.querySelector('[data-color="'+newColor+'"]').getElementsByTagName('span')[0];
-            event.target.parentElement.getElementsByTagName('span')[0].style.borderColor = '#333333';
+            if(event.target.localName === 'input' && parentElement.getElementsByTagName('span')[0].getAttribute('data-color')){
+                selectColor(previousColor,parentElement.getElementsByTagName('span')[0]);
+            }
         }
     }
 
@@ -72,11 +72,11 @@ function runCode() {
             let radio = document.createElement('input');
             let span = document.createElement('span');
 
-            labelElement.setAttribute('data-color',color);
             radio.setAttribute('type', 'radio');
             radio.setAttribute('name','peg-color');
-            radio.setAttribute('data-color',color);
+
             span.classList.add('radio');
+            span.setAttribute('data-color',color);
             span.style.backgroundColor = pegColors[color];
             span.style.border = '2px solid' + pegColors[color];
 
@@ -88,8 +88,21 @@ function runCode() {
         toolsElement.appendChild(colorSwitcher);
     }
 
+    function selectColor(previousElement,newElement) {
+        if(previousElement!==newElement){
+            let oldColor = previousElement.getAttribute('data-color');
+            let newColor = newElement.getAttribute('data-color');
+
+            previousElement.style.borderColor = pegColors[oldColor];
+            newElement.style.borderColor = '#333333';
+
+            previousColor = newElement;
+            selectedColor = newColor;
+        }
+    }
+
     function placePeg(currentCell){
-        currentCell.className = newColor;
+        currentCell.className = selectedColor;
         currentCell.innerHTML = '';
     }
 
@@ -105,7 +118,7 @@ function runCode() {
     document.documentElement.addEventListener('click', clickHandler, false);
 
     // Set current color to yellow
-    currentColor = toolsElement.querySelector('[data-color="yellow"]').getElementsByTagName('span')[0];
+    previousColor = toolsElement.querySelector('[data-color="yellow"]');
 }
 
 // TODO: List of things to do...
