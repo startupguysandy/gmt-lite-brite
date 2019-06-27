@@ -21,6 +21,28 @@ function runCode() {
         }
     }
 
+    function generateTable(){
+        // 3 board sizes: small, medium, large
+        // use a counter and then forEach through them to create the table sizes
+        // if a small table is selected, we would have maybe 6 rows with 8 pegs in each
+        // a medium table could be 10 rows with 16 pegs each
+        // use modulo math to work out if we need to add the 'indent' class on the first cell or not
+
+        let playArea = document.getElementById('app');
+        let requiredRows = 2;
+
+        for(let row=1; row<=requiredRows; row++){
+            let tableElement = document.createElement('table');
+            let rowElement = tableElement.insertRow(0);
+            for(let i=0; i<=4; i++){
+                let cell = rowElement.insertCell(i);
+                cell.setAttribute('data-counter',0);
+            }
+            playArea.appendChild(tableElement);
+        }
+
+    }
+
     function cycleColors(currentCell){
         //white, yellow, blue, pink, orange and green
         let cellColors = ['yellow','blue','pink','orange','green','white'];
@@ -39,13 +61,17 @@ function runCode() {
     //
     // Initializations
     //
+    generateTable();
     document.documentElement.addEventListener('click', clickHandler, false);
 }
 
 // TODO: List of things to do...
 //  - If the user right clicks a cell, it resets the counter to 0 and color to white
 //  - Generate a table, tr's and td's via js once a button has been clicked
-//  - Consider: Should I do a color picker for the pegs?
+//  - Add color picker for pegs
+//  - Animate in the table once it's generated to add some excitement
+//  - Add a "turn on" button on the board which makes all the lights brighter. Brings the whole thing to life!
+
 
 //  - DONE: Once a table cell has been clicked, change the background color
 //  - DONE: Stagger table rows to create hexagonal shape
