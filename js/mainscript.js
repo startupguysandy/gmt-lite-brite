@@ -8,29 +8,18 @@ function runCode() {
     //
     // Variables
     //
-
+    let boardElement = document.getElementById('app').getElementsByClassName('board')[0];
+    let toolsElement = document.getElementById('app').getElementsByClassName('tools')[0];
+    let cellColors = ['yellow','blue','pink','orange','green','white'];
 
     //
     // Methods
     //
-    function clickHandler(event){
-        if((event.target.localName === 'td') || (event.target.parentElement && event.target.parentElement.localName ==='td')){
-            // let currentCell = event.target;
-            let currentCell = event.target.localName === 'span' ? event.target.parentElement : event.target;
-
-            if(currentCell.className !== 'indent'){
-                cycleColors(currentCell);
-                addPeg(currentCell);
-            }
-        }
-    }
-
     function generateTable(){
         let smallBoard = {rows:19,pegs:25};
         let mediumBoard = {rows:29,pegs:35};
         let largeBoard = {rows:39,pegs:45};
 
-        let appElement = document.getElementById('app');
         let playArea = mediumBoard;
         let requiredRows = playArea.rows;
         let requiredPegs = playArea.pegs;
@@ -47,13 +36,42 @@ function runCode() {
                     cell.innerHTML = '<span></span>';
                 }
             }
-            appElement.appendChild(tableElement);
+            boardElement.appendChild(tableElement);
         }
 
     }
 
+    function clickHandler(event){
+        if((event.target.localName === 'td') || (event.target.parentElement && event.target.parentElement.localName ==='td')){
+            let currentCell = event.target.localName === 'span' ? event.target.parentElement : event.target;
+            if(currentCell.className !== 'indent'){
+                cycleColors(currentCell);
+                addPeg(currentCell);
+            }
+        }
+    }
+
+    function generateColors(){
+        let colorSwitcher = document.getElementsByClassName('peg-colors')[0];
+        let ul = document.createElement('ul');
+        cellColors.forEach(function(color){
+            let li = document.createElement('li');
+            let radio = document.createElement('input');
+
+            li.className = 'title-case';
+            radio.setAttribute('type', 'radio');
+            radio.setAttribute('name','peg-color');
+            radio.setAttribute('data-color',color);
+
+            li.appendChild(radio);
+            li.appendChild(document.createTextNode(color));
+            ul.appendChild(li);
+        });
+        colorSwitcher.appendChild(ul);
+        toolsElement.appendChild(colorSwitcher);
+    }
+
     function cycleColors(currentCell){
-        let cellColors = ['yellow','blue','pink','orange','green','white'];
         let currentCounter = parseInt(currentCell.getAttribute('data-counter'));
         let nextCounter = currentCounter+1;
 
@@ -71,17 +89,19 @@ function runCode() {
     }
 
     function removePeg(currentCell){
-        currentCell.innerHTML = '<span></span>';
+        currentCell.createElement('span');
     }
     
     //
     // Initializations
     //
     generateTable();
+    generateColors();
     document.documentElement.addEventListener('click', clickHandler, false);
 }
 
 // TODO: List of things to do...
+//  - Add on hover to show placement of next peg
 //  - If the user right clicks a cell, it resets the counter to 0 and color to white
 //  - Generate a table, tr's and td's via js once a button has been clicked
 //  - Add color picker for pegs
