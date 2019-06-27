@@ -14,8 +14,14 @@ function runCode() {
     // Methods
     //
     function clickHandler(event){
-        if((event.target.localName === 'td') && (event.target.className !== 'indent')){
-            cycleColors(event.target);
+        if((event.target.localName === 'td') || (event.target.parentElement && event.target.parentElement.localName ==='td')){
+            // let currentCell = event.target;
+            let currentCell = event.target.localName === 'span' ? event.target.parentElement : event.target;
+
+            if(currentCell.className !== 'indent'){
+                cycleColors(currentCell);
+                addPeg(currentCell);
+            }
         }
     }
 
@@ -37,6 +43,8 @@ function runCode() {
                 cell.setAttribute('data-counter',0);
                 if((row%2 !== 0) && (i===0)){
                     cell.classList.add('indent');
+                } else {
+                    cell.innerHTML = '<span></span>';
                 }
             }
             appElement.appendChild(tableElement);
@@ -56,6 +64,14 @@ function runCode() {
             currentCell.setAttribute('data-counter', 0);
             currentCell.className = cellColors[0];
         }
+    }
+
+    function addPeg(currentCell){
+        currentCell.innerHTML = '';
+    }
+
+    function removePeg(currentCell){
+        currentCell.innerHTML = '<span></span>';
     }
     
     //

@@ -6,18 +6,29 @@ body {
 
 table {
     border-spacing: 1px;
-    border-top: 1px;
+    margin-top: -3px;
 }
 
 td {
     height: 16px;
     width: 16px;
-    background-color: #dddddd;
+    background-color: #ffffff;
+    border-spacing: 0;
     border-radius: 50%;
+}
+
+td span {
+    height: 80%;
+    width: 80%;
+    background-color: #eeeeee;
+    display: block;
+    border-radius: 50%;
+    margin: 0 auto;
 }
 
 td.indent {
     width: 6px; /* need to account for border-spacing on each side of td element */
+    height: 6px;
     background-color: #ffffff;
 }
 
