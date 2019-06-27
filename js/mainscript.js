@@ -10,7 +10,15 @@ function runCode() {
     //
     let boardElement = document.getElementById('app').getElementsByClassName('board')[0];
     let toolsElement = document.getElementById('app').getElementsByClassName('tools')[0];
-    let cellColors = ['yellow','blue','pink','orange','green','white'];
+    let pegColors = {
+        yellow: '#fed231',
+        blue: '#2eacdd',
+        pink: '#cb5aa2',
+        orange: '#f2952e',
+        green: '#8ec348',
+        white: '#efefef'
+    };
+    let selectedColor = 'yellow';
 
     //
     // Methods
@@ -45,46 +53,41 @@ function runCode() {
         if((event.target.localName === 'td') || (event.target.parentElement && event.target.parentElement.localName ==='td')){
             let currentCell = event.target.localName === 'span' ? event.target.parentElement : event.target;
             if(currentCell.className !== 'indent'){
-                cycleColors(currentCell);
-                addPeg(currentCell);
+                placePeg(currentCell);
             }
+        }
+        if(event.target.hasAttribute('data-color')){
+            selectedColor = event.target.getAttribute('data-color');
+            console.log(selectedColor);
         }
     }
 
     function generateColors(){
         let colorSwitcher = document.getElementsByClassName('peg-colors')[0];
-        let ul = document.createElement('ul');
-        cellColors.forEach(function(color){
-            let li = document.createElement('li');
+        Object.keys(pegColors).forEach(function(color){
+            let labelElement = document.createElement('label');
             let radio = document.createElement('input');
+            let span = document.createElement('span');
 
-            li.className = 'title-case';
+            labelElement.className = 'title-case';
             radio.setAttribute('type', 'radio');
             radio.setAttribute('name','peg-color');
             radio.setAttribute('data-color',color);
+            span.classList.add('radio');
+            span.style.backgroundColor = pegColors[color];
+            span.style.border = '2px solid' + pegColors[color];
 
-            li.appendChild(radio);
-            li.appendChild(document.createTextNode(color));
-            ul.appendChild(li);
+            labelElement.appendChild(radio);
+            labelElement.appendChild(span);
+
+            colorSwitcher.appendChild(labelElement);
+            console.log(pegColors[color]);
         });
-        colorSwitcher.appendChild(ul);
         toolsElement.appendChild(colorSwitcher);
     }
 
-    function cycleColors(currentCell){
-        let currentCounter = parseInt(currentCell.getAttribute('data-counter'));
-        let nextCounter = currentCounter+1;
-
-        if(currentCounter !== 5){
-            currentCell.setAttribute('data-counter', nextCounter);
-            currentCell.className = cellColors[nextCounter];
-        } else {
-            currentCell.setAttribute('data-counter', 0);
-            currentCell.className = cellColors[0];
-        }
-    }
-
-    function addPeg(currentCell){
+    function placePeg(currentCell){
+        currentCell.className = selectedColor;
         currentCell.innerHTML = '';
     }
 
