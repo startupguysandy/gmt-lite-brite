@@ -12,7 +12,7 @@ table {
 td {
     height: 16px;
     width: 16px;
-    background-color: #999999;
+    background-color: #dddddd;
     border-radius: 50%;
 }
 
@@ -22,7 +22,7 @@ td.indent {
 }
 
 /* Peg Colors */
-td.white {background-color: #eeeeee;}
+td.white {background-color: #efefef;}
 td.yellow {background-color: #fed231;}
 td.blue {background-color: #2eacdd;}
 td.pink {background-color: #cb5aa2;}

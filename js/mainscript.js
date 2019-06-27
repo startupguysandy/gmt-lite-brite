@@ -10,11 +10,9 @@ function runCode() {
     //
 
 
-
     //
     // Methods
     //
-
     function clickHandler(event){
         if((event.target.localName === 'td') && (event.target.className !== 'indent')){
             cycleColors(event.target);
@@ -22,29 +20,31 @@ function runCode() {
     }
 
     function generateTable(){
-        // 3 board sizes: small, medium, large
-        // use a counter and then forEach through them to create the table sizes
-        // if a small table is selected, we would have maybe 6 rows with 8 pegs in each
-        // a medium table could be 10 rows with 16 pegs each
-        // use modulo math to work out if we need to add the 'indent' class on the first cell or not
+        let smallBoard = {rows:19,pegs:25};
+        let mediumBoard = {rows:29,pegs:35};
+        let largeBoard = {rows:39,pegs:45};
 
-        let playArea = document.getElementById('app');
-        let requiredRows = 2;
+        let appElement = document.getElementById('app');
+        let playArea = mediumBoard;
+        let requiredRows = playArea.rows;
+        let requiredPegs = playArea.pegs;
 
-        for(let row=1; row<=requiredRows; row++){
+        for(let row=0; row<=requiredRows-1; row++){
             let tableElement = document.createElement('table');
             let rowElement = tableElement.insertRow(0);
-            for(let i=0; i<=4; i++){
+            for(let i=0; i<=requiredPegs-1; i++){
                 let cell = rowElement.insertCell(i);
                 cell.setAttribute('data-counter',0);
+                if((row%2 !== 0) && (i===0)){
+                    cell.classList.add('indent');
+                }
             }
-            playArea.appendChild(tableElement);
+            appElement.appendChild(tableElement);
         }
 
     }
 
     function cycleColors(currentCell){
-        //white, yellow, blue, pink, orange and green
         let cellColors = ['yellow','blue','pink','orange','green','white'];
         let currentCounter = parseInt(currentCell.getAttribute('data-counter'));
         let nextCounter = currentCounter+1;
