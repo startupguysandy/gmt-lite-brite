@@ -3,6 +3,71 @@ body {
     max-width: 60em;
     width: 88%;
 }
+ul, li, input {
+    margin: 0;
+    padding: 0;
+}
+
+.title-case {
+    text-transform: capitalize;
+}
+
+.peg-colors input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.peg-colors .radio {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    opacity: 0.5;
+    border-radius: 50%;
+}
+
+.peg-colors .radio:hover {
+    opacity: 1;
+}
+
+.peg-colors input:checked ~ .radio {
+    opacity: 1;
+}
+
+.peg-colors label {
+    display: inline-block;
+    position: relative;
+    height: 25px;
+    width: 25px;
+    margin: 12px 6px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.peg-colors label:hover input ~ .radio {
+    border: 2px solid #eeeeee;
+}
+
+.peg-colors label span:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.peg-colors .radio:after {
+    top: 9px;
+    left: 9px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: white;
+}
 
 table {
     border-spacing: 1px;
