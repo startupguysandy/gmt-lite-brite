@@ -4,10 +4,21 @@ body {
     width: 88%;
 }
 
+table {
+    border-spacing: 1px;
+    border-top: 1px;
+}
+
 td {
-    height: 30px;
-    width: 30px;
+    height: 16px;
+    width: 16px;
     background-color: #999999;
+    border-radius: 50%;
+}
+
+td.indent {
+    width: 6px; /* need to account for border-spacing on each side of td element */
+    background-color: #ffffff;
 }
 
 /* Peg Colors */

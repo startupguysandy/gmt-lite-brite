@@ -16,8 +16,7 @@ function runCode() {
     //
 
     function clickHandler(event){
-        console.log(event);
-        if(event.target.localName === 'td'){
+        if((event.target.localName === 'td') && (event.target.className !== 'indent')){
             cycleColors(event.target);
         }
     }
@@ -44,5 +43,10 @@ function runCode() {
 }
 
 // TODO: List of things to do...
-//  - Once a table cell has been clicked, change the background color
+//  - If the user right clicks a cell, it resets the counter to 0 and color to white
 //  - Generate a table, tr's and td's via js once a button has been clicked
+//  - Consider: Should I do a color picker for the pegs?
+
+//  - DONE: Once a table cell has been clicked, change the background color
+//  - DONE: Stagger table rows to create hexagonal shape
+//  - DONE: Make the "pegs" circular
