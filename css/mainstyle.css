@@ -4,14 +4,25 @@ body {
     width: 88%;
 }
 
+table {
+    border-spacing: 1px;
+    border-top: 1px;
+}
+
 td {
-    height: 30px;
-    width: 30px;
-    background-color: #999999;
+    height: 16px;
+    width: 16px;
+    background-color: #dddddd;
+    border-radius: 50%;
+}
+
+td.indent {
+    width: 6px; /* need to account for border-spacing on each side of td element */
+    background-color: #ffffff;
 }
 
 /* Peg Colors */
-td.white {background-color: #eeeeee;}
+td.white {background-color: #efefef;}
 td.yellow {background-color: #fed231;}
 td.blue {background-color: #2eacdd;}
 td.pink {background-color: #cb5aa2;}
