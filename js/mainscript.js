@@ -18,8 +18,8 @@ function runCode() {
         green: '#8ec348',
         white: '#efefef'
     };
-    let newColor = 'yellow';
-    let currentColor;
+    let selectedColor = 'yellow';
+    let previousColor;
     //
     // Methods
     //
@@ -37,7 +37,6 @@ function runCode() {
             let rowElement = tableElement.insertRow(0);
             for(let i=0; i<=requiredPegs-1; i++){
                 let cell = rowElement.insertCell(i);
-                cell.setAttribute('data-counter',0);
                 if((row%2 !== 0) && (i===0)){
                     cell.classList.add('indent');
                 } else {
@@ -50,33 +49,57 @@ function runCode() {
     }
 
     function clickHandler(event){
-        if((event.target.localName === 'td') || (event.target.parentElement && event.target.parentElement.localName ==='td')){
-            let currentCell = event.target.localName === 'span' ? event.target.parentElement : event.target;
-            if(currentCell.className !== 'indent'){
-                placePeg(currentCell);
+        if(validateIfWithinCell(event) !== false) {
+            let currentCell = validateIfWithinCell(event);
+            placePeg(currentCell);
+        }
+        let parentElement = event.target.parentElement;
+        if(event.target.localName === 'input' && parentElement.getElementsByTagName('span')[0].getAttribute('data-color')){
+            selectColor(previousColor,parentElement.getElementsByTagName('span')[0]);
+        }
+    }
+
+    function hoverHandler(event){
+        if(validateIfWithinCell(event) !== false){
+            let currentCell = validateIfWithinCell(event);
+            hoverPeg(currentCell);
+        }
+    }
+
+    function exitHandler(event){
+        if(validateIfWithinCell(event)){
+            let currentCell = validateIfWithinCell(event);
+            removePeg(currentCell);
+        }
+    }
+
+    function validateIfWithinCell(eventListener) {
+        if(eventListener.target.parentElement){
+            let parentElement = eventListener.target.parentElement;
+            if(eventListener.target.localName === 'td' || parentElement.localName ==='td'){
+                let currentCell = eventListener.target.localName === 'span' ? parentElement : eventListener.target;
+                if(currentCell.className !== 'indent'){
+                    return currentCell;
+                }
             }
         }
-        if(event.target.hasAttribute('data-color')){
-            currentColor.style.borderColor = pegColors[currentColor.parentElement.getAttribute('data-color')];
-            newColor = event.target.getAttribute('data-color');
-            currentColor = toolsElement.querySelector('[data-color="'+newColor+'"]').getElementsByTagName('span')[0];
-            event.target.parentElement.getElementsByTagName('span')[0].style.borderColor = '#333333';
-        }
+        return false;
     }
 
     function generateColors(){
         let colorSwitcher = document.getElementsByClassName('peg-colors')[0];
 
-        Object.keys(pegColors).forEach(function(color){
+        Object.keys(pegColors).forEach(function(color,index){
             let labelElement = document.createElement('label');
             let radio = document.createElement('input');
             let span = document.createElement('span');
 
-            labelElement.setAttribute('data-color',color);
+            if(index===0){ radio.checked = true }
             radio.setAttribute('type', 'radio');
             radio.setAttribute('name','peg-color');
-            radio.setAttribute('data-color',color);
+
             span.classList.add('radio');
+            span.setAttribute('data-color',color);
             span.style.backgroundColor = pegColors[color];
             span.style.border = '2px solid' + pegColors[color];
 
@@ -88,13 +111,32 @@ function runCode() {
         toolsElement.appendChild(colorSwitcher);
     }
 
+    function selectColor(previousElement,newElement) {
+        let oldColor = previousElement.getAttribute('data-color');
+        let newColor = newElement.getAttribute('data-color');
+
+        previousElement.style.borderColor = pegColors[oldColor];
+        newElement.style.borderColor = '#333333';
+
+        previousColor = newElement;
+        selectedColor = newColor;
+    }
+    
+    function hoverPeg(currentCell) {
+        currentCell.className = selectedColor;
+        currentCell.innerHTML = '';
+    }
+
     function placePeg(currentCell){
-        currentCell.className = newColor;
+        currentCell.className = selectedColor;
         currentCell.innerHTML = '';
     }
 
     function removePeg(currentCell){
-        currentCell.createElement('span');
+        let span = document.createElement('span');
+
+        currentCell.appendChild(span);
+        currentCell.className = '';
     }
     
     //
@@ -103,18 +145,23 @@ function runCode() {
     generateTable();
     generateColors();
     document.documentElement.addEventListener('click', clickHandler, false);
+    document.documentElement.addEventListener('mouseover', hoverHandler, true);
+    document.documentElement.addEventListener('mouseout', exitHandler, true);
+
 
     // Set current color to yellow
-    currentColor = toolsElement.querySelector('[data-color="yellow"]').getElementsByTagName('span')[0];
+    previousColor = toolsElement.querySelector('[data-color="yellow"]');
+    selectColor(previousColor,previousColor);
 }
 
 // TODO: List of things to do...
-//  - Add on hover to show placement of next peg
 //  - If the user right clicks a cell, it resets the counter to 0 and color to white
 //  - Generate a table, tr's and td's via js once a button has been clicked
 //  - Animate in the table once it's generated to add some excitement
 //  - Add a "turn on" button on the board which makes all the lights brighter. Brings the whole thing to life!
+//  - Work out how to throttle or debounce so the onHover doesn't bug out. I think I need to find a way of throttling the id="app" to get it to work, each td element doesn't work.
 
+//  - Add on hover to show placement of next peg
 //  - DONE: Add color picker for pegs
 //  - DONE: Once a table cell has been clicked, change the background color
 //  - DONE: Stagger table rows to create hexagonal shape
