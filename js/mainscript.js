@@ -37,7 +37,6 @@ function runCode() {
             let rowElement = tableElement.insertRow(0);
             for(let i=0; i<=requiredPegs-1; i++){
                 let cell = rowElement.insertCell(i);
-                cell.setAttribute('data-counter',0);
                 if((row%2 !== 0) && (i===0)){
                     cell.classList.add('indent');
                 } else {
@@ -50,28 +49,49 @@ function runCode() {
     }
 
     function clickHandler(event){
-        if(event.target.parentElement){
-            let parentElement = event.target.parentElement;
-            if(event.target.localName === 'td' || parentElement.localName ==='td'){
-                let currentCell = event.target.localName === 'span' ? parentElement : event.target;
+        if(validateIfWithinCell(event) !== false) {
+            let currentCell = validateIfWithinCell(event);
+            placePeg(currentCell);
+        }
+        let parentElement = event.target.parentElement;
+        if(event.target.localName === 'input' && parentElement.getElementsByTagName('span')[0].getAttribute('data-color')){
+            selectColor(previousColor,parentElement.getElementsByTagName('span')[0]);
+        }
+    }
+
+    function hoverHandler(event){
+        if(validateIfWithinCell(event) !== false){
+            let currentCell = validateIfWithinCell(event);
+            hoverPeg(currentCell);
+        }
+    }
+
+    function exitHandler(event){
+        validateIfWithinCell(event);
+    }
+
+    function validateIfWithinCell(eventListener) {
+        if(eventListener.target.parentElement){
+            let parentElement = eventListener.target.parentElement;
+            if(eventListener.target.localName === 'td' || parentElement.localName ==='td'){
+                let currentCell = eventListener.target.localName === 'span' ? parentElement : eventListener.target;
                 if(currentCell.className !== 'indent'){
-                    placePeg(currentCell);
+                    return currentCell;
                 }
             }
-            if(event.target.localName === 'input' && parentElement.getElementsByTagName('span')[0].getAttribute('data-color')){
-                selectColor(previousColor,parentElement.getElementsByTagName('span')[0]);
-            }
         }
+        return false;
     }
 
     function generateColors(){
         let colorSwitcher = document.getElementsByClassName('peg-colors')[0];
 
-        Object.keys(pegColors).forEach(function(color){
+        Object.keys(pegColors).forEach(function(color,index){
             let labelElement = document.createElement('label');
             let radio = document.createElement('input');
             let span = document.createElement('span');
 
+            if(index===0){ radio.checked = true }
             radio.setAttribute('type', 'radio');
             radio.setAttribute('name','peg-color');
 
@@ -89,16 +109,18 @@ function runCode() {
     }
 
     function selectColor(previousElement,newElement) {
-        if(previousElement!==newElement){
-            let oldColor = previousElement.getAttribute('data-color');
-            let newColor = newElement.getAttribute('data-color');
+        let oldColor = previousElement.getAttribute('data-color');
+        let newColor = newElement.getAttribute('data-color');
 
-            previousElement.style.borderColor = pegColors[oldColor];
-            newElement.style.borderColor = '#333333';
+        previousElement.style.borderColor = pegColors[oldColor];
+        newElement.style.borderColor = '#333333';
 
-            previousColor = newElement;
-            selectedColor = newColor;
-        }
+        previousColor = newElement;
+        selectedColor = newColor;
+    }
+    
+    function hoverPeg(currentCell) {
+        currentCell.className = selectedColor;
     }
 
     function placePeg(currentCell){
@@ -116,9 +138,13 @@ function runCode() {
     generateTable();
     generateColors();
     document.documentElement.addEventListener('click', clickHandler, false);
+    document.documentElement.addEventListener('mouseenter', hoverHandler, true);
+    document.documentElement.addEventListener('mouseout', exitHandler, true);
+
 
     // Set current color to yellow
     previousColor = toolsElement.querySelector('[data-color="yellow"]');
+    selectColor(previousColor,previousColor);
 }
 
 // TODO: List of things to do...
