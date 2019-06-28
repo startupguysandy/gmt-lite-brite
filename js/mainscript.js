@@ -67,7 +67,10 @@ function runCode() {
     }
 
     function exitHandler(event){
-        validateIfWithinCell(event);
+        if(validateIfWithinCell(event)){
+            let currentCell = validateIfWithinCell(event);
+            removePeg(currentCell);
+        }
     }
 
     function validateIfWithinCell(eventListener) {
@@ -121,6 +124,7 @@ function runCode() {
     
     function hoverPeg(currentCell) {
         currentCell.className = selectedColor;
+        currentCell.innerHTML = '';
     }
 
     function placePeg(currentCell){
@@ -129,7 +133,10 @@ function runCode() {
     }
 
     function removePeg(currentCell){
-        currentCell.createElement('span');
+        let span = document.createElement('span');
+
+        currentCell.appendChild(span);
+        currentCell.className = '';
     }
     
     //
@@ -138,7 +145,7 @@ function runCode() {
     generateTable();
     generateColors();
     document.documentElement.addEventListener('click', clickHandler, false);
-    document.documentElement.addEventListener('mouseenter', hoverHandler, true);
+    document.documentElement.addEventListener('mouseover', hoverHandler, true);
     document.documentElement.addEventListener('mouseout', exitHandler, true);
 
 
@@ -148,12 +155,13 @@ function runCode() {
 }
 
 // TODO: List of things to do...
-//  - Add on hover to show placement of next peg
 //  - If the user right clicks a cell, it resets the counter to 0 and color to white
 //  - Generate a table, tr's and td's via js once a button has been clicked
 //  - Animate in the table once it's generated to add some excitement
 //  - Add a "turn on" button on the board which makes all the lights brighter. Brings the whole thing to life!
+//  - Work out how to throttle or debounce so the onHover doesn't bug out. I think I need to find a way of throttling the id="app" to get it to work, each td element doesn't work.
 
+//  - Add on hover to show placement of next peg
 //  - DONE: Add color picker for pegs
 //  - DONE: Once a table cell has been clicked, change the background color
 //  - DONE: Stagger table rows to create hexagonal shape
