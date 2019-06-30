@@ -93,6 +93,10 @@ td span {
     margin: 0 auto;
 }
 
+td:hover span {
+    display: none;
+}
+
 td.indent {
     width: 6px; /* need to account for border-spacing on each side of td element */
     height: 6px;
