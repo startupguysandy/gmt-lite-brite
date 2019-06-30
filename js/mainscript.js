@@ -16,7 +16,7 @@ function runCode() {
         pink: '#cb5aa2',
         orange: '#f2952e',
         green: '#8ec348',
-        white: '#efefef'
+        grey: '#dddddd'
     };
     let selectedColor = 'yellow';
     let previousColor;
@@ -42,6 +42,10 @@ function runCode() {
                     cell.classList.add('indent');
                 } else {
                     cell.innerHTML = '<span></span>';
+                    cell.addEventListener('contextmenu', function(e){
+                        removePeg(cell);
+                        e.preventDefault();
+                    }, false);
                 }
             }
             boardElement.appendChild(tableElement);
@@ -146,11 +150,10 @@ function runCode() {
     }
 
     function removePeg(currentCell){
-        if(currentCell.getAttribute('data-pegged') === 'false'){
-            currentCell.className = '';
-        } else {
-            // let span = document.createElement('span');
-            // currentCell.appendChild(span);
+        currentCell.removeAttribute('class');
+        if(currentCell.getAttribute('data-pegged') === 'true'){
+            let span = document.createElement('span');
+            currentCell.appendChild(span);
         }
     }
     
@@ -170,12 +173,12 @@ function runCode() {
 }
 
 // TODO: List of things to do...
-//  - If the user right clicks a cell, it resets the counter to 0 and color to white
 //  - Generate a table, tr's and td's via js once a button has been clicked
 //  - Animate in the table once it's generated to add some excitement
 //  - Add a "turn on" button on the board which makes all the lights brighter. Brings the whole thing to life!
 //  - Work out how to throttle or debounce so the onHover doesn't bug out. I think I need to find a way of throttling the id="app" to get it to work, each td element doesn't work.
 
+//  - DONE: If the user right clicks a cell, remove the bg color and add the span back in
 //  - FIXED: On hover is applying the background color if a peg is already in that cell, meaning even hovering with a new color replaces that cell.
 //  - DONE: Add on hover to show placement of next peg
 //  - DONE: Add color picker for pegs
