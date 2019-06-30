@@ -87,10 +87,14 @@ td {
 td span {
     height: 80%;
     width: 80%;
-    background-color: #eeeeee;
+    background-color: #f5f5f5;
     display: block;
     border-radius: 50%;
     margin: 0 auto;
+}
+
+td:hover span {
+    display: none;
 }
 
 td.indent {
@@ -100,9 +104,9 @@ td.indent {
 }
 
 /* Peg Colors */
-td.white {background-color: #efefef;}
 td.yellow {background-color: #fed231;}
 td.blue {background-color: #2eacdd;}
 td.pink {background-color: #cb5aa2;}
 td.orange {background-color: #f2952e;}
 td.green {background-color: #8ec348;}
+td.grey {background-color: #efefef;}
